@@ -7,14 +7,16 @@
     <link rel="stylesheet" href="{{url_for('static', filename='review_style.css')}}">
 </head>
 <body>
+    <!--Card-->
     <div class="card">
-        <div class="level-badge">{{level}}</div>
+        <div class="level-badge">{{level}}</div> <!--Level badge-->
 
-        <a href="/" class="home">Home</a>
+        <a href="/" class="home">Home</a> <!--Home button-->
 
-        <div id="word">{{word}}</div> <!--Word-->
+        <div id="original">{{original}}</div> <!--Original-->
 
-        <div id="meaning"></div> <!--Meaning-->
+        <div id="furigana"></div> <!--Furigana-->
+        <div id="english"></div> <!--English-->
 
         <button onclick="showAnswer()" class="flashcard-buttons">Show answer</button> <!--Show answer button-->
 
@@ -24,7 +26,8 @@
     <!--Script-->
     <script>
         function showAnswer(){
-            document.getElementById("meaning").innerHTML="{{meaning}}";
+            document.getElementById("furigana").innerHTML="{{furigana}}";
+            document.getElementById("english").innerHTML="{{english}}";
         }
     </script>
 </body>

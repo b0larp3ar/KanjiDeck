@@ -59,12 +59,12 @@ body{
     text-decoration:none;
 }
 
-#word{
-    font-size: 100px;
+#original{
+    font-size: 70px;
     color: white;
 }
 
-#meaning{
+#english, #furigana{
     color:white;
     font-size:30px;
     min-height:40px;

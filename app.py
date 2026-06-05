@@ -13,10 +13,10 @@ def home():
 def review(level):
     conn=sqlite3.connect("vocabulary.db")
     cursor=conn.cursor()
-    cursor.execute("SELECT word, meaning FROM Vocabulary WHERE level=? ORDER BY RANDOM() LIMIT 1", (level,))
+    cursor.execute("SELECT original, furigana, english FROM Vocabulary WHERE level=? ORDER BY RANDOM() LIMIT 1", (level,))
     card=cursor.fetchone()
     conn.close()
-    return render_template("review.html", word=card[0], meaning=card[1], level=level)
+    return render_template("review.html", original=card[0], furigana=card[1], english=card[2], level=level)
 
 #run flask
 if __name__=="__main__":

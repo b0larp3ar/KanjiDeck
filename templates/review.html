@@ -4,20 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Review</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='review_style.css')}}">
 </head>
 <body>
-    <div id="word">Word: {{word}}</div> <!--Word-->
+    <div class="card">
+        <div class="level-badge">{{level}}</div>
 
-    <div id="meaning"></div> <!--Meaning-->
+        <a href="/" class="home">Home</a>
 
-    <button onclick="showAnswer()">Show answer</button> <!--Show answer button-->
+        <div id="word">{{word}}</div> <!--Word-->
 
-    <button onclick="location.reload()">Next card</button> <!--Next card button-->
+        <div id="meaning"></div> <!--Meaning-->
+
+        <button onclick="showAnswer()" class="flashcard-buttons">Show answer</button> <!--Show answer button-->
+
+        <button onclick="location.reload()" class="flashcard-buttons">Next card</button> <!--Next card button-->
+    </div>
 
     <!--Script-->
     <script>
         function showAnswer(){
-            document.getElementById("meaning").innerHTML="Meaning: {{meaning}}";
+            document.getElementById("meaning").innerHTML="{{meaning}}";
         }
     </script>
 </body>

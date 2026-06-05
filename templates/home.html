@@ -4,13 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='home_style.css')}}">
 </head>
 <body>
-    <!--Select JLPT Levels-->
-    <a href="/review/N5"><button>N5</button></a>
-    <a href="/review/N4"><button>N4</button></a>
-    <a href="/review/N3"><button>N3</button></a>
-    <a href="/review/N2"><button>N2</button></a>
-    <a href="/review/N1"><button>N1</button></a>
+    <div class="container">
+        <div class="title">
+            <h1>KanjiDeck</h1>
+        </div>
+
+        <!--Select JLPT Levels-->
+        <div class="levels">
+            <a href="/review/N5"><button class="level-button">N5</button></a>
+            <a href="/review/N4"><button class="level-button">N4</button></a>
+            <a href="/review/N3"><button class="level-button">N3</button></a>
+            <a href="/review/N2"><button class="level-button">N2</button></a>
+            <a href="/review/N1"><button class="level-button">N1</button></a>
+        </div>
+    </div>
 </body>
 </html>

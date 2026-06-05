@@ -16,7 +16,7 @@ def review(level):
     cursor.execute("SELECT word, meaning FROM Vocabulary WHERE level=? ORDER BY RANDOM() LIMIT 1", (level,))
     card=cursor.fetchone()
     conn.close()
-    return render_template("review.html", word=card[0], meaning=card[1])
+    return render_template("review.html", word=card[0], meaning=card[1], level=level)
 
 #run flask
 if __name__=="__main__":

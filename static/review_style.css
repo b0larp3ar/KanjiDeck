@@ -1,0 +1,91 @@
+body{
+    margin:0;
+    background-color:#121212;
+    font-family: Arial, sans-serif;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    height:100vh;
+}
+
+.card{
+    position: relative;
+
+    width:600px;
+    height:500px;
+
+    background-color:#1E1E1E;
+
+    border-radius:25px;
+
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    gap:20px;
+}
+
+.level-badge{
+    position: absolute;
+    top: 20px;
+    left: 20px;
+
+    background-color: #695D9C;
+    font-weight: bold;
+
+    color: white;
+
+    padding: 5px 12px;
+
+    border-radius: 10px;
+
+    font-size: 16px;
+}
+
+.home{
+    position:absolute;
+    top:20px;
+    right:20px;
+
+    background:#695D9C;
+    color:white;
+
+    padding:8px 15px;
+
+    border-radius:10px;
+
+    text-decoration:none;
+}
+
+#word{
+    font-size: 100px;
+    color: white;
+}
+
+#meaning{
+    color:white;
+    font-size:30px;
+    min-height:40px;
+}
+
+.flashcard-buttons{
+    width:180px;
+    height:50px;
+
+    border:none;
+    border-radius:12px;
+
+    background-color:#695D9C;
+
+    color:white;
+
+    cursor:pointer;
+
+    transition: 0.2s;
+}
+
+button:hover{
+    transform: translateY(-2px);
+}

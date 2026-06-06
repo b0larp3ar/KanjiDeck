@@ -8,6 +8,16 @@
 </head>
 <body>
     <div class="container">
+        <!--Side bar-->
+        <button id="side-button" onclick="sideBarToggle()">☰</button>
+
+        <div id="sidebar" class="sidebar">
+            <a href="/">Option 1</a>
+            <a href="/">Option 2</a>
+            <a href="/">Option 3</a>
+            <a href="/">Option 4</a>
+        </div>
+
         <!--Title-->
         <div class="title">
             <h1>KanjiDeck</h1>
@@ -22,5 +32,15 @@
             <a href="/review/N1"><button class="level-button">N1</button></a>
         </div>
     </div>
+
+    <!--Scripts-->
+    <script>
+        const sidebar=document.getElementById("sidebar");
+        const sidebutton=document.getElementById("side-button");
+        function sideBarToggle(){
+            sidebar.classList.toggle("open")
+            sidebutton.classList.toggle("open")
+        }
+    </script>
 </body>
 </html>

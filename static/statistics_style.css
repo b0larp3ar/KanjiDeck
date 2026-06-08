@@ -1,0 +1,186 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@500&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+    --bg:          #0f0f0f;
+    --surface:     #1a1a1a;
+    --surface-2:   #222222;
+    --border:      #2e2e2e;
+    --text:        white;
+    --muted:       #e8e8e8;
+    --correct:     #4ade80;
+    --incorrect:   #f87171;
+    --accent:      #695D9C;
+    --n5:          #695D9C;
+    --n4:          #695D9C;
+    --n3:          #695D9C;
+    --n2:          #695D9C;
+    --n1:          #695D9C;
+}
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 16px;
+}
+
+.page-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+    max-width: 560px;
+}
+
+/* ── Cards ── */
+.card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 28px 32px;
+    animation: fadeUp .4s ease both;
+}
+.level-card { animation-delay: .1s; }
+
+@keyframes fadeUp {
+    from { opacity:0; transform: translateY(14px); }
+    to   { opacity:1; transform: translateY(0); }
+}
+
+.section-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 20px;
+}
+
+/* ── Review count ── */
+.review-count {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 28px;
+}
+.review-icon { font-size: 28px; line-height: 1; }
+.review-number {
+    font-family: 'DM Mono', monospace;
+    font-size: 42px;
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: -.02em;
+}
+
+/* ── Percentage row ── */
+.pct-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+.pct-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'DM Mono', monospace;
+    font-size: 20px;
+    font-weight: 500;
+}
+.pct-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: 700;
+}
+.pct-item.correct  .pct-icon { background: rgba(74,222,128,.15); color: var(--correct); }
+.pct-item.correct  .pct-value { color: var(--correct); }
+.pct-item.incorrect .pct-icon { background: rgba(248,113,113,.15); color: var(--incorrect); }
+.pct-item.incorrect .pct-value { color: var(--incorrect); }
+
+/* ── Main bar ── */
+.bar-track {
+    display: flex;
+    height: 10px;
+    border-radius: 999px;
+    overflow: hidden;
+    background: var(--surface-2);
+    gap: 2px;
+}
+.bar-fill { height: 100%; border-radius: 999px; transition: width .6s cubic-bezier(.4,0,.2,1); }
+.correct-fill   { background: var(--correct); }
+.incorrect-fill { background: var(--incorrect); }
+
+.bar-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    font-size: 13px;
+}
+.label-correct  { color: var(--correct); font-weight: 500; }
+.label-incorrect{ color: var(--incorrect); font-weight: 500; }
+
+/* ── Level rows ── */
+.levels { display: flex; flex-direction: column; gap: 14px; }
+
+.level-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.level-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    width: 32px;
+    text-align: center;
+    padding: 3px 0;
+    border-radius: 6px;
+    flex-shrink: 0;
+}
+.level-n5 { background: var(--accent); color: white; }
+.level-n4 { background: var(--accent);  color: white; }
+.level-n3 { background: var(--accent);  color: white; }
+.level-n2 { background: var(--accent);  color: white; }
+.level-n1 { background: var(--accent); color: white; }
+
+.level-bar-track {
+    flex: 1;
+    height: 7px;
+    background: var(--surface-2);
+    border-radius: 999px;
+    overflow: hidden;
+}
+.level-bar-fill {
+    height: 100%;
+    border-radius: 999px;
+    transition: width .7s cubic-bezier(.4,0,.2,1);
+}
+.level-fill-n5 { background: var(--n5); }
+.level-fill-n4 { background: var(--n4); }
+.level-fill-n3 { background: var(--n3); }
+.level-fill-n2 { background: var(--n2); }
+.level-fill-n1 { background: var(--n1); }
+
+.level-count {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: var(--muted);
+    width: 28px;
+    text-align: right;
+    flex-shrink: 0;
+}
+
+/* Hide Jinja demo rows when rendered statically (they'd be duplicates) */
+/* Remove .demo-only selector when using Jinja templating */

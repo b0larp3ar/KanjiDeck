@@ -21,16 +21,20 @@
         <button onclick="showAnswer()" id="show-answer-button" class="flashcard-buttons">Show answer</button> <!--Show answer button-->
 
         <!--Correct/incorrect-->
-        <div id="review-buttons" style="display: none;">
+        <div id="review-buttons" class="review-buttons" style="display: none;">
             <form action="/correct" method="POST">
                 <input type="hidden" name="card_id" value="{{id}}">
                 <input type="hidden" name="level" value="{{level}}">
+                <input type="hidden" name="correct" value="{{correct}}">
+                <input type="hidden" name="incorrect" value="{{incorrect}}">
                 <button class="flashcard-buttons">Correct</button> <!--Correct button-->
             </form>
 
             <form action="/incorrect" method="POST">
                 <input type="hidden" name="card_id" value="{{id}}">
                 <input type="hidden" name="level" value="{{level}}">
+                <input type="hidden" name="correct" value="{{correct}}">
+                <input type="hidden" name="incorrect" value="{{incorrect}}">
                 <button class="flashcard-buttons">Incorrect</button> <!--Incorrect button-->
             </form>
         </div>
@@ -42,7 +46,7 @@
             document.getElementById("furigana").innerHTML="{{furigana}}";
             document.getElementById("english").innerHTML="{{english}}";
             document.getElementById("show-answer-button").style.display="none";
-            document.getElementById("review-buttons").style.display="block";
+            document.getElementById("review-buttons").style.display="flex";
         }
     </script>
 </body>

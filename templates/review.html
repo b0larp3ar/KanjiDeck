@@ -18,9 +18,22 @@
         <div id="furigana"></div> <!--Furigana-->
         <div id="english"></div> <!--English-->
 
-        <button onclick="showAnswer()" class="flashcard-buttons">Show answer</button> <!--Show answer button-->
+        <button onclick="showAnswer()" id="show-answer-button" class="flashcard-buttons">Show answer</button> <!--Show answer button-->
 
-        <button onclick="location.reload()" class="flashcard-buttons">Next card</button> <!--Next card button-->
+        <!--Correct/incorrect-->
+        <div id="review-buttons" style="display: none;">
+            <form action="/correct" method="POST">
+                <input type="hidden" name="card_id" value="{{id}}">
+                <input type="hidden" name="level" value="{{level}}">
+                <button class="flashcard-buttons">Correct</button> <!--Correct button-->
+            </form>
+
+            <form action="/incorrect" method="POST">
+                <input type="hidden" name="card_id" value="{{id}}">
+                <input type="hidden" name="level" value="{{level}}">
+                <button class="flashcard-buttons">Incorrect</button> <!--Incorrect button-->
+            </form>
+        </div>
     </div>
 
     <!--Script-->
@@ -28,6 +41,8 @@
         function showAnswer(){
             document.getElementById("furigana").innerHTML="{{furigana}}";
             document.getElementById("english").innerHTML="{{english}}";
+            document.getElementById("show-answer-button").style.display="none";
+            document.getElementById("review-buttons").style.display="block";
         }
     </script>
 </body>

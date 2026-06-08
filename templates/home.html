@@ -10,7 +10,7 @@
 <body>
     <div class="container">
         <!--Side bar-->
-        <button id="side-button" onclick="sideBarToggle()">
+        <button class="side-button" onclick="sideBarToggle()">
             <i class="fa-solid fa-bars"></i>
         </button>
 
@@ -39,10 +39,8 @@
     <!--Scripts-->
     <script>
         const sidebar=document.getElementById("sidebar");
-        const sidebutton=document.getElementById("side-button");
         function sideBarToggle(){
             sidebar.classList.toggle("open")
-            sidebutton.classList.toggle("open")
         }
     </script>
 </body>

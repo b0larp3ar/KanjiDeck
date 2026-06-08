@@ -5,17 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
     <link rel="stylesheet" href="{{url_for('static', filename='home_style.css')}}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
     <div class="container">
         <!--Side bar-->
-        <button id="side-button" onclick="sideBarToggle()">☰</button>
+        <button id="side-button" onclick="sideBarToggle()">
+            <i class="fa-solid fa-bars"></i>
+        </button>
 
         <div id="sidebar" class="sidebar">
-            <a href="/">Option 1</a>
-            <a href="/">Option 2</a>
-            <a href="/">Option 3</a>
-            <a href="/">Option 4</a>
+            <a href="/"><button class="level-button">Option 1</button></a>
+            <a href="/"><button class="level-button">Option 2</button></a>
+            <a href="/"><button class="level-button">Option 3</button></a>
+            <a href="/"><button class="level-button">Option 4</button></a>
         </div>
 
         <!--Title-->

@@ -23,6 +23,8 @@ body{
 
     display: flex;
     flex-direction: column;
+    gap: 30px;
+    align-items: center;
 
     background-color: #1E1E1E;
 
@@ -36,6 +38,13 @@ body{
     top: 20px;
     left: 20px;
     z-index: 1000;
+
+    font-size: 28px;
+    color: white;
+    border: none;
+    background: none;
+    cursor: pointer;
+
     transition: 0.3s;
 }
 

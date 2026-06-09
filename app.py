@@ -146,8 +146,12 @@ def statistics():
 
     total=correct+incorrect
 
-    correct_percentage=round((correct/total)*100, 2)
-    incorrect_percentage=round((incorrect/total)*100, 2)
+    if total!=0:
+        correct_percentage=round((correct/total)*100, 2)
+        incorrect_percentage=round((incorrect/total)*100, 2)
+    else:
+        correct_percentage=0
+        incorrect_percentage=0
 
     return render_template("statistics.html", correct=correct, incorrect=incorrect, total=total, n5=n5, n4=n4, n3=n3, n2=n2, n1=n1, correct_percentage=correct_percentage, incorrect_percentage=incorrect_percentage)
 

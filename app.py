@@ -40,7 +40,7 @@ def review(level):
     conn.commit()
     conn.close()
     
-    return render_template("review.html", id=card[0], original=card[1], furigana=card[2], english=card[3], level=level, correct=card[4], incorrect=card[5], position=card[6])
+    return render_template("review.html", id=card[0], original=card[1], furigana=card[2], english=card[3], level=level, correct=card[5], incorrect=card[6], position=card[7])
 
 #Updates reviewHistory.db when user reviews a card
 @app.route("/correct", methods=["POST"])

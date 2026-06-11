@@ -1,20 +1,27 @@
 from flask import Flask, render_template, request, redirect, session
 from werkzeug.security import generate_password_hash
 from werkzeug.security import check_password_hash
-from datetime import datetime
-import sqlite3
+import psycopg2
+from psycopg2.extras import execute_values
+from dotenv import load_dotenv
+import os
 
+load_dotenv() 
+#helper function to connect to supabase
+def getdb():
+    return psycopg2.connect(os.environ["DATABASE_URL"])
+#setting up flask
 app=Flask(__name__)
-app.secret_key="kanjideck_secretkey"
+app.secret_key=os.environ["SECRET_KEY"]
 
 #home page
 @app.route("/")
 def home():
     if "user_id" in session:
         #getting username
-        conn = sqlite3.connect("users.db")
+        conn=getdb()
         cursor = conn.cursor()
-        cursor.execute("SELECT username FROM User WHERE id=?", (session["user_id"],))
+        cursor.execute("SELECT username FROM user_account WHERE id=%s", (session["user_id"],))
         username = cursor.fetchone()[0]
         conn.close()
 
@@ -30,38 +37,35 @@ def review(level):
 
     user_id=session["user_id"]
 
-    conn=sqlite3.connect("userProgress.db")
+    conn=getdb()
     cursor=conn.cursor()
 
-    cursor.execute("SELECT current_position FROM UserQueue WHERE (user_id, level)=(?, ?)", (user_id, level))
+    cursor.execute("SELECT current_queue_position FROM user_queue WHERE (user_id, level)=(%s, %s)", (user_id, level))
     current_position=cursor.fetchone()[0]
     card=()
 
     if current_position==0:
-        cursor.execute("SELECT id from UserProgress WHERE position=? AND user_id=? AND level=? ORDER BY RANDOM() LIMIT 1", (0, user_id, level)) #if cp=0, choose any card whose position=0
+        cursor.execute("SELECT id from user_progress WHERE position=%s AND user_id=%s AND level=%s ORDER BY RANDOM() LIMIT 1", (0, user_id, level)) #if cp=0, choose any card whose position=0
         id=cursor.fetchone()[0]
-        cursor.execute("UPDATE UserProgress SET position=? WHERE id=?", (1, id)) #set its position to 1
+        cursor.execute("UPDATE user_progress SET position=%s WHERE id=%s", (1, id)) #set its position to 1
         current_position+=1
 
     if card==(): 
-        cursor.execute("SELECT * from UserProgress WHERE position=? AND user_id=? AND level=? ORDER BY RANDOM()", (current_position, user_id, level)) #choose a card whose position=cp
+        cursor.execute("SELECT * from user_progress WHERE position=%s AND user_id=%s AND level=%s ORDER BY RANDOM()", (current_position, user_id, level)) #choose a card whose position=cp
         card=cursor.fetchone()
         
         if card is None:
-            cursor.execute("SELECT * FROM UserProgress WHERE position=0 AND user_id=? AND level=? ORDER BY RANDOM() LIMIT 1", (user_id, level)) #if no card has position=cp, choose any card whose position=0
+            cursor.execute("SELECT * FROM user_progress WHERE position=0 AND user_id=%s AND level=%s ORDER BY RANDOM() LIMIT 1", (user_id, level)) #if no card has position=cp, choose any card whose position=0
             card=cursor.fetchone()
-            cursor.execute("UPDATE UserProgress SET position=? WHERE id=?", (current_position, card[0])) #set its position to a
+            cursor.execute("UPDATE user_progress SET position=%s WHERE id=%s", (current_position, card[0])) #set its position to a
         current_position+=1
 
-    cursor.execute("UPDATE UserQueue SET current_position=? WHERE (user_id, level)=(?, ?)", (current_position, user_id, level))
+    cursor.execute("UPDATE user_queue SET current_queue_position=%s WHERE (user_id, level)=(%s, %s)", (current_position, user_id, level))
 
-    conn.commit()
-    conn.close()
-
-    conn=sqlite3.connect("vocabulary.db")
-    cursor=conn.cursor()
-    cursor.execute("SELECT original, furigana, english FROM Vocabulary WHERE id=?", (card[2],))
+    cursor.execute("SELECT original, furigana, english FROM vocabulary WHERE id=%s", (card[2],))
     vocab=cursor.fetchone()
+    
+    conn.commit()
     conn.close()
     
     return render_template("review.html", id=card[2], original=vocab[0], furigana=vocab[1], english=vocab[2], level=level, correct=card[4], incorrect=card[5], position=card[6])
@@ -72,25 +76,23 @@ def correct():
     user_id=session["user_id"]
     card_id=request.form["card_id"]
     level=request.form["level"]
-    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     correct=int(request.form["correct"])+1
     incorrect=int(request.form["incorrect"])
 
     #Updates queue position of the card reviewed
-    conn=sqlite3.connect("userProgress.db")
+    conn=getdb()
     cursor=conn.cursor()
  
-    cursor.execute("UPDATE UserProgress SET correct=? WHERE (user_id, card_id)=(?, ?)", (correct, user_id, card_id))
+    cursor.execute("UPDATE user_progress SET correct=%s WHERE (user_id, card_id)=(%s, %s)", (correct, user_id, card_id))
     
-    cursor.execute("SELECT current_position FROM UserQueue WHERE (user_id, level)=(?, ?)", (user_id, level))
+    cursor.execute("SELECT current_queue_position FROM user_queue WHERE (user_id, level)=(%s, %s)", (user_id, level))
     current_position=cursor.fetchone()[0]
 
     total=correct+incorrect
     correct_percentage=(correct/total)*100
     position = max(5, round(10 * (1.05 ** (correct_percentage - 50)))) #finds position
     
-    global a
-    cursor.execute("UPDATE UserProgress SET position=? WHERE (user_id, card_id)=(?, ?)", (position+current_position, user_id, card_id)) #updates position of reviewed cardz
+    cursor.execute("UPDATE user_progress SET position=%s WHERE (user_id, card_id)=(%s, %s)", (position+current_position, user_id, card_id)) #updates position of reviewed cardz
 
     conn.commit()
     conn.close()
@@ -102,16 +104,15 @@ def incorrect():
     user_id=session["user_id"]
     card_id=request.form["card_id"]
     level=request.form["level"]
-    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     correct=int(request.form["correct"])
     incorrect=int(request.form["incorrect"])+1
 
     #Updates queue position of the card reviewed
-    conn=sqlite3.connect("userProgress.db")
+    conn=getdb()
     cursor=conn.cursor()
 
-    cursor.execute("UPDATE UserProgress SET incorrect=? WHERE (user_id, card_id)=(?, ?)", (incorrect, user_id, card_id))
-    cursor.execute("SELECT current_position FROM UserQueue WHERE (user_id, level)=(?, ?)", (user_id, level))
+    cursor.execute("UPDATE user_progress SET incorrect=%s WHERE (user_id, card_id)=(%s, %s)", (incorrect, user_id, card_id))
+    cursor.execute("SELECT current_queue_position FROM user_queue WHERE (user_id, level)=(%s, %s)", (user_id, level))
     current_position=cursor.fetchone()[0]
 
     total=correct+incorrect
@@ -119,8 +120,8 @@ def incorrect():
 
     position = max(5, round(10 * (1.05 ** (correct_percentage - 50))))
     
-    global a
-    cursor.execute("UPDATE UserProgress SET position=? WHERE (user_id, card_id)=(?, ?)", (position+current_position, user_id, card_id))
+    cursor.execute("UPDATE user_progress SET position=%s WHERE (user_id, card_id)=(%s, %s)", (position+current_position, user_id, card_id))
+
     conn.commit()
     conn.close()
 
@@ -134,35 +135,35 @@ def statistics():
 
     user_id=session["user_id"]
 
-    conn=sqlite3.connect("userProgress.db")
+    conn=getdb()
     cursor=conn.cursor()
 
     #number of correct reviews
-    cursor.execute("SELECT SUM(correct) FROM UserProgress WHERE user_id=?", (user_id,))
+    cursor.execute("SELECT SUM(correct) FROM user_progress WHERE user_id=%s", (user_id,))
     correct=cursor.fetchone()[0]
 
     #number of incorrect reviews
-    cursor.execute("SELECT SUM(incorrect) FROM UserProgress WHERE user_id=?", (user_id,))
+    cursor.execute("SELECT SUM(incorrect) FROM user_progress WHERE user_id=%s", (user_id,))
     incorrect=cursor.fetchone()[0]
 
     #number of N5 reviews
-    cursor.execute("SELECT SUM(correct+incorrect) FROM UserProgress WHERE user_id=? AND level='N5'", (user_id,))
+    cursor.execute("SELECT SUM(correct+incorrect) FROM user_progress WHERE user_id=%s AND level='N5'", (user_id,))
     n5=cursor.fetchone()[0]
 
     #number of N4 reviews
-    cursor.execute("SELECT SUM(correct+incorrect) FROM UserProgress WHERE user_id=? AND level='N4'", (user_id,))
+    cursor.execute("SELECT SUM(correct+incorrect) FROM user_progress WHERE user_id=%s AND level='N4'", (user_id,))
     n4=cursor.fetchone()[0]
 
     #number of N3 reviews
-    cursor.execute("SELECT SUM(correct+incorrect) FROM UserProgress WHERE user_id=? AND level='N3'", (user_id,))
+    cursor.execute("SELECT SUM(correct+incorrect) FROM user_progress WHERE user_id=%s AND level='N3'", (user_id,))
     n3=cursor.fetchone()[0]
 
     #number of N2 reviews
-    cursor.execute("SELECT SUM(correct+incorrect) FROM UserProgress WHERE user_id=? AND level='N2'", (user_id,))
+    cursor.execute("SELECT SUM(correct+incorrect) FROM user_progress WHERE user_id=%s AND level='N2'", (user_id,))
     n2=cursor.fetchone()[0]
 
     #number of N1 reviews
-    cursor.execute("SELECT SUM(correct+incorrect) FROM UserProgress WHERE user_id=? AND level='N1'", (user_id,))
+    cursor.execute("SELECT SUM(correct+incorrect) FROM user_progress WHERE user_id=%s AND level='N1'", (user_id,))
     n1=cursor.fetchone()[0]
 
     conn.close()
@@ -188,12 +189,12 @@ def register():
     password=request.form["password"]
     confirm_password=request.form["confirm-password"]
 
-    #check if username already exists
-    conn=sqlite3.connect("users.db")
+    conn=getdb() #connected to supabase
     cursor=conn.cursor()
-    cursor.execute("SELECT username FROM User WHERE username=?", (username, ))
+
+    #check if username already exists
+    cursor.execute("SELECT username FROM user_account WHERE username=%s", (username, ))
     username_db=cursor.fetchone()
-    conn.close()
 
     if username_db is not None:
         error="Username already exists"
@@ -207,28 +208,21 @@ def register():
     password_hash=generate_password_hash(password)
 
     #store the new user's credentials in users
-    conn=sqlite3.connect("users.db")
-    cursor=conn.cursor()
-    cursor.execute("INSERT INTO User(username, password_hash) VALUES(?, ?)", (username, password_hash))
-    user_id=cursor.lastrowid
-    conn.commit()
-    conn.close()
+    cursor.execute("INSERT INTO user_account(username, password_hash) VALUES(%s, %s) RETURNING id", (username, password_hash))
+    user_id=cursor.fetchone()[0]
 
     #create rows for every card for this user in userProgress and initialize current queue positions for each level
-    conn=sqlite3.connect("vocabulary.db")
-    cursor=conn.cursor()
-    cursor.execute("SELECT id, level FROM Vocabulary") #getting every card from Vocabulary
+    cursor.execute("SELECT id, level FROM vocabulary") #getting every card from Vocabulary
     cards=cursor.fetchall()
-    conn.close()
 
-    conn=sqlite3.connect("userProgress.db")
-    cursor=conn.cursor()
+    rows=[]
     for card in cards:
-        cursor.execute("INSERT INTO UserProgress(user_id, card_id, level, correct, incorrect, position) VALUES(?, ?, ?, ?, ?, ?)", (user_id, card[0], card[1], 0, 0, 0)) #uploading every card in userProgress for this user
+        rows.append((user_id, card[0], card[1], 0, 0, 0))
+    execute_values(cursor, "INSERT INTO user_progress(user_id, card_id, level, correct, incorrect, position) VALUES %s", rows)
     
     for level in ["N5", "N4", "N3", "N2", "N1"]:
-        cursor.execute("INSERT INTO UserQueue(user_id, level, current_position) VALUES(?, ?, ?)", (user_id, level, 0))
-    
+        cursor.execute("INSERT INTO user_queue(user_id, level, current_queue_position) VALUES(%s, %s, %s)", (user_id, level, 0))
+
     conn.commit()
     conn.close()
 
@@ -242,13 +236,10 @@ def login():
     username=request.form["username"]
     password=request.form["password"]
 
-    conn=sqlite3.connect("users.db")
+    conn=getdb()
     cursor=conn.cursor()
-
-    cursor.execute("SELECT id, password_hash FROM User WHERE username=?", (username, ))
-
+    cursor.execute("SELECT id, password_hash FROM user_account WHERE username=%s", (username, ))
     user=cursor.fetchone()
-
     conn.commit()
     conn.close()
 

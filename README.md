@@ -1,6 +1,6 @@
-# KanjiDeck v1.2.0
+# KanjiDeck v1.3.0
 
-KanjiDeck is a web-based Japanese vocabulary flashcard application built with Flask and SQLite. It uses a custom spaced repetition system (SRS) to help users review JLPT vocabulary efficiently. Users can create accounts, track their own learning progress, review cards by JLPT level, and view detailed statistics about their performance.
+KanjiDeck is a web-based Japanese vocabulary flashcard application built with Flask and PostgreSQL. It uses a custom spaced repetition system (SRS) to help users review JLPT vocabulary efficiently and stores progress in the cloud. Users can create accounts, track their own learning progress, review cards by JLPT level, and view detailed statistics about their performance.
 
 Created to help learners efficiently review JLPT vocabulary through a custom SRS-based flashcard system.
 
@@ -11,7 +11,7 @@ Desktop App (Windows): [KanjiDeck-DA](https://github.com/nthnerr/KanjiDeck-DA)
 ## Features
 
 * JLPT level selection (N5, N4, N3, N2, N1)
-* 8000+ vocabulary flashcards from an SQLite database
+* 8000+ vocabulary flashcards stored in the cloud(PostgreSQL)
 * Show/Hide answer functionality
 * Next card generation
 * Modern dark-themed UI
@@ -54,13 +54,6 @@ Desktop App (Windows): [KanjiDeck-DA](https://github.com/nthnerr/KanjiDeck-DA)
 KanjiDeck/
 │
 ├── app.py
-├── database.py
-├── vocabulary.db               -> JLPT vocabulary cards
-├── userDatabase.py
-├── users.db                    -> User accounts and authentication
-├── userProgressDatabase.py
-├── userProgress.db             -> User progress and queue positions
-├── jlpt_vocab.csv
 │
 ├── templates/
 │   ├── home.html
@@ -188,10 +181,12 @@ http://127.0.0.1:5000
 
 * Python
 * Flask
-* SQLite
+* PostgreSQL
 * HTML
 * CSS
 * Javascript
+* Render
+* Supabase
 
 ## License
 

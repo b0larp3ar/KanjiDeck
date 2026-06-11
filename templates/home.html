@@ -18,6 +18,17 @@
             <a href="/statistics"><button class="level-button">Statistics</button></a>
         </div>
 
+        <!--Login/logout-->
+        <div class="login-register">
+            {% if username %}
+                <p>Welcome, {{username}}</p>
+                <a href="/logout"><button class="level-button">Logout</button></a>
+            {% else %}
+                <a href="/login"><button class="level-button">Login</button></a>
+                <a href="/register"><button class="level-button">Register</button></a>
+            {% endif %}
+        </div>
+
         <!--Title-->
         <div class="title">
             <h1>KanjiDeck</h1>

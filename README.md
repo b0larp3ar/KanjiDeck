@@ -39,11 +39,11 @@ Desktop App (Windows): [KanjiDeck-DA](https://github.com/nthnerr/KanjiDeck-DA)
   <tr>
     <td align="center">
       <img src="images/v1.2 login.png" width="450"><br>
-      Statistics
+      Login Page
     </td>
     <td align="center">
       <img src="images/v1.2 stats.png" width="450"><br>
-      Login Page
+      Statistics
     </td>
   </tr>
 </table>

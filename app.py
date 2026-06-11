@@ -185,22 +185,21 @@ def register():
         return render_template("register.html")
 
     username=request.form["username"]
+    password=request.form["password"]
+    confirm_password=request.form["confirm-password"]
 
     #check if username already exists
     conn=sqlite3.connect("users.db")
     cursor=conn.cursor()
     cursor.execute("SELECT username FROM User WHERE username=?", (username, ))
-    username_db=cursor.fetchone()[0]
+    username_db=cursor.fetchone()
     conn.close()
 
-    if username_db:
+    if username_db is not None:
         error="Username already exists"
         return render_template("register.html", error=error)
 
     #check if password matches confirm password
-    password=request.form["password"]
-    confirm_password=request.form["confirm-password"]
-
     if password!=confirm_password:
         error="Passwords do not match"
         return render_template("register.html", error=error)

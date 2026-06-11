@@ -2,7 +2,7 @@
 
 KanjiDeck is a web-based Japanese vocabulary flashcard application built with Flask and SQLite. It uses a custom spaced repetition system (SRS) to help users review JLPT vocabulary efficiently. Users can create accounts, track their own learning progress, review cards by JLPT level, and view detailed statistics about their performance.
 
-Created to help learners efficiently review JLPT vocabulary through a custom SRS-based flashcard system
+Created to help learners efficiently review JLPT vocabulary through a custom SRS-based flashcard system.
 
 Live on: https://kanjideck.onrender.com/
 

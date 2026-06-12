@@ -198,7 +198,7 @@ def register():
 
     if username_db is not None:
         error="Username already exists"
-        return render_template("register.html", error=error)
+        return render_template("register.html", error=error) 
 
     #check if password matches confirm password
     if password!=confirm_password:
@@ -225,6 +225,8 @@ def register():
 
     conn.commit()
     conn.close()
+
+    session["user_id"]=user_id #automatically log them in after registration
 
     return redirect("/")
 

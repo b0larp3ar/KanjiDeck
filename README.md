@@ -1,12 +1,12 @@
 # KanjiDeck v1.3.0
 
-KanjiDeck is a web-based Japanese vocabulary flashcard application built with Flask and PostgreSQL. It uses a custom spaced repetition system (SRS) to help users review JLPT vocabulary efficiently and stores progress in the cloud. Users can create accounts, track their own learning progress, review cards by JLPT level, and view detailed statistics about their performance.
+KanjiDeck is a web-based Japanese vocabulary flashcard application built with Flask and PostgreSQL. It uses a custom spaced repetition system (SRS) to help users review JLPT vocabulary efficiently and stores progress in the cloud(Supabase). Users can create accounts, track their own learning progress, review cards by JLPT level, and view detailed statistics about their performance.
 
 Created to help learners efficiently review JLPT vocabulary through a custom SRS-based flashcard system.
 
 Live on: https://kanjideck.onrender.com/
 
-Desktop App (Windows): [KanjiDeck-DA](https://github.com/nthnerr/KanjiDeck-DA)
+Desktop App (Windows): [KanjiDeck-DA](https://github.com/nthnerr/KanjiDeck-DA) 
 
 ## Features
 
@@ -70,9 +70,6 @@ KanjiDeck/
 │   └── review_style.css
 │
 ├── images/
-│   ├── homepage.png
-│   ├── review_1.png
-│   └── review_2.png
 │
 ├── .gitignore
 ├── requirements.txt
@@ -81,7 +78,7 @@ KanjiDeck/
 ---
 ## Database Structure
 
-### User
+### user_account
 
 Stores user account information.
 
@@ -91,7 +88,7 @@ Stores user account information.
 | username      | Unique username |
 | password_hash | Hashed password |
 
-### UserProgress
+### user_progress
 
 Stores review progress for each card.
 
@@ -105,17 +102,17 @@ Stores review progress for each card.
 | incorrect | Number of incorrect reviews |
 | position  | Next review position        |
 
-### UserQueue
+### user_queue
 
 Stores the current review queue position for each JLPT level.
 
-| Column           | Description            |
-| ---------------- | ---------------------- |
-| user_id          | User ID                |
-| level            | JLPT level             |
-| current_position | Current queue position |
+| Column                 | Description            |
+| ---------------------- | ---------------------- |
+| user_id                | User ID                |
+| level                  | JLPT level             |
+| current_queue_position | Current queue position |
 
-### Vocabulary
+### vocabulary
 
 Stores all vocabulary cards.
 
@@ -185,8 +182,8 @@ http://127.0.0.1:5000
 * HTML
 * CSS
 * Javascript
-* Render
-* Supabase
+* Render(Deployment)
+* Supabase(Cloud storage)
 
 ## License
 

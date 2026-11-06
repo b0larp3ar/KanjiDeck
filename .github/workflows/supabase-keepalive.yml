@@ -13,14 +13,14 @@ jobs:
     steps:
       - name: Ping Supabase Database
         run: |
-          response=$(curl -s -o /dev/null -w "%{http_code}" \
-            "${{ secrets.SUPABASE_URL }}/rest/v1/user_progress?select=id&limit=1" \
+          response=$(curl -sS -w "\nHTTP_STATUS:%{http_code}" \
+            "${{ secrets.SUPABASE_URL }}/rest/v1/user_progress?select=*&limit=1" \
             -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}" \
             -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}")
 
-          echo "Supabase response: $response"
+          echo "$response"
 
-          if [ "$response" != "200" ]; then
+          if ! echo "$response" | grep -q "HTTP_STATUS:200"; then
             echo "Supabase ping failed!"
             exit 1
           fi
